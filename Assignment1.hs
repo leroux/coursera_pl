@@ -17,7 +17,7 @@ numberInMonth :: [Date] -> Month -> Int
 numberInMonth ds m = length $ filter (\(_, m', _) -> m' == m) ds
 
 numberInMonths :: [Date] -> [Month] -> Int
-numberInMonths ds ms = length $ filter (\(_, m', _) -> m' `elem` ms) ds
+numberInMonths ds ms = length $ filter (\(_, m, _) -> m `elem` ms) ds
 
 datesInMonth :: [Date] -> Month -> [Date]
 datesInMonth ds m = filter (\(_, m', _) -> m' == m) ds
