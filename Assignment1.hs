@@ -8,10 +8,10 @@ type DayOfYear = Int
 
 isOlder :: Date -> Date -> Bool
 isOlder (y1, m1, d1) (y2, m2, d2)
-  | y1 >= y2   = False
-  | m1 >= m2   = False
-  | d1 > d2   = False
-  | otherwise = True
+  | y1 < y2   = True
+  | m1 < m2   = True
+  | d1 < d2   = True
+  | otherwise = False
 
 numberInMonth :: [Date] -> Month -> Int
 numberInMonth ds m = length $ filter (\(_, m', _) -> m' == m) ds
@@ -26,7 +26,7 @@ datesInMonths :: [Date] -> [Month] -> [Date]
 datesInMonths ds ms = filter (\(_, m, _) -> m `elem` ms) ds
 
 getNth :: [a] -> Int -> a
-getNth (x:_) 1  = x
+getNth (x:_) 1 = x
 getNth (_:xs) n = getNth xs (n - 1)
 
 months :: [String]
@@ -38,19 +38,19 @@ dateToString (y, m, d) = getNth months m ++ " " ++ show d ++ ", " ++ show y
 
 numberBeforeReachingSum :: Int -> [Int] -> Int
 numberBeforeReachingSum b xs = numberBeforeReachingSum' xs 0 0
-  where numberBeforeReachingSum' [] _ n = n 
+  where numberBeforeReachingSum' [] _ n = n - 1
         numberBeforeReachingSum' (x:xs') s n
-          | s >= b = n
+          | s >= b = n - 1
           | otherwise = numberBeforeReachingSum' xs' (s + x) (n + 1)
 
 monthLengths :: [Int]
-monthLengths = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+monthLengths = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 
 whatMonth :: DayOfYear -> Month
 whatMonth d = numberBeforeReachingSum d monthLengths
 
 monthRange :: DayOfYear -> DayOfYear -> [Month]
-monthRange d1 d2 = [(whatMonth d1) .. (whatMonth d2)]
+monthRange d1 d2 = [whatMonth d1 .. whatMonth d2]
 
 older :: Date -> Date -> Date
 older d1 d2 = if isOlder d1 d2 then d1 else d2
